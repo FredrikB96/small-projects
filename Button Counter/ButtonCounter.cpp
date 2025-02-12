@@ -38,6 +38,7 @@ int main() {
 	}
 
 	}while(run);
+	// Give time to see the end message.
 	usleep(3 * microsecond);
 }
 
