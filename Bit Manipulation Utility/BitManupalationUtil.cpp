@@ -1,5 +1,8 @@
 #include <iostream>
 #include <vector>
+#include <bitset>
+#include <stdint.h>
+
 
 int InputManager();
 int IsNumber(std::string input);
@@ -8,9 +11,9 @@ int AddNumbers(int NumberOfElements);
 int GetIndex(int SearchNumber);
 int DeleteNumbers(int NumberOfElements);
 void PrintElements();
+int BitWiseOperation();
 
-
-std::vector<int> UserNumbers = {11,12,15,22};
+std::vector<uint16_t> UserNumbers;
 
 int main() {
     int mode = 0;
@@ -26,6 +29,7 @@ int main() {
             mode = NumberModifactionMode();
             break;
         case 2:
+            mode = BitWiseOperation();
             break;  
         case 3:
             break;
@@ -34,7 +38,7 @@ int main() {
         default:
             break;
         }
-        if(mode = -1)
+        if(mode < 0)
         {
             // Error!
         }
@@ -46,6 +50,77 @@ int main() {
     }while(mode != 4);
     return 1;
 }
+
+int BitWiseOperation(){
+    std::cout << "\nAvailable operations: 1.&   2.|   3.^   4.~   5.>>   6.<<\nWhat operation do you want to perform?" << std::endl;
+    int UserChoice = InputManager();
+    PrintElements();
+    std::cout << "What number do you wish to modify?" << std::endl;
+    int UserNum = InputManager();
+    int index = GetIndex(UserNum);
+    switch (UserChoice)
+    {
+    case 1:        
+    {
+        std::cout << "what number do you want to performe the AND operator with: " << std::endl;
+        int Steps = InputManager();
+        std::bitset<sizeof(uint16_t)> bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
+        UserNumbers[GetIndex(UserNum)] = UserNumbers[GetIndex(UserNum)] & Steps;
+        break;
+    }
+    break;
+    case 2:
+    {
+        std::cout << "What number do you want to performe the OR operator with: " << std::endl;
+        int Steps = InputManager();
+        std::bitset<sizeof(uint16_t)> bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
+        UserNumbers[GetIndex(UserNum)] = UserNumbers[GetIndex(UserNum)] | Steps;
+        break;
+    }
+    break;
+    case 3:
+    {
+        std::cout << "What number do you want to performe the XOR operator with: " << std::endl;
+        int Steps = InputManager();
+        std::bitset<sizeof(uint16_t)> bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
+        UserNumbers[GetIndex(UserNum)] = UserNumbers[GetIndex(UserNum)] ^ Steps;
+        break;
+    }
+    break;
+    case 4:
+    {
+        UserNumbers[GetIndex(UserNum)] = ~UserNumbers[GetIndex(UserNum)];
+    }    
+        break;
+    case 5:
+    {
+        std::cout << "Number of steps to the right is: " << std::endl;
+        int Steps = InputManager();
+        std::bitset<sizeof(uint16_t)> bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
+        UserNumbers[GetIndex(UserNum)] = UserNumbers[GetIndex(UserNum)] >> Steps;
+        break;
+    }
+    case 6:
+    {
+        std::cout << "Number of steps to the left is: " << std::endl;
+        int Steps = InputManager();
+        std::bitset<sizeof(uint16_t)> bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
+#ifdef DEBUG
+        std::cout << "Before edit: " << bits << std::endl;
+#endif
+        UserNumbers[GetIndex(UserNum)] = UserNumbers[GetIndex(UserNum)] << Steps;
+#ifdef DEBUG
+        bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
+        std::cout << "After edit: " << bits << std::endl;
+#endif
+    }
+        break;
+    default:
+        break;
+    }
+    return 1;
+}
+
 
 int NumberModifactionMode(){
     int input;
@@ -79,12 +154,12 @@ int DeleteNumbers(int NumberOfElements)
 
 int AddNumbers(int NumberOfElements)
 {
-    UserNumbers.resize(NumberOfElements*2);
+    UserNumbers.resize(NumberOfElements);
     for(int i=0;i<UserNumbers.size();i++)
     {
-        std::cout << "Enter number " << i << " to use:";
-        int NewNumber = InputManager();
-        UserNumbers[i] = NewNumber; 
+        std::cout << "Enter number " << i+1 << " to use:";
+        uint16_t NewNumber = InputManager();
+        UserNumbers[i] = NewNumber;
     }
 
     if(UserNumbers.size() == NumberOfElements){
@@ -125,7 +200,9 @@ int GetIndex(int SearchNumber){
 void PrintElements(){
     std::cout << "\n Data: ";
     for(int i=0; i<UserNumbers.size();i++){
-    std::cout << UserNumbers[i] << ", ";
+        std::bitset<16> bits = std::bitset<16>(UserNumbers[i]);
+
+        std::cout << UserNumbers[i] << " " << bits << ", ";
     }
     std::cout << std::endl;
 }
