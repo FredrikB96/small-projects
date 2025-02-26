@@ -3,39 +3,45 @@
 #include <bitset>
 #include <stdint.h>
 
+enum MenuOptions { INPUT_NUMBERS = 1, BITWISE_OPERATION, HELP, EXIT, ERROR = 8 };
+
 
 int InputManager();
 int IsNumber(std::string input);
-int NumberModifactionMode();
+int NumberModificationMode();
 int AddNumbers(int NumberOfElements);
 int GetIndex(int SearchNumber);
 int DeleteNumbers(int NumberOfElements);
 void PrintElements();
 int BitWiseOperation();
+void ApplyBitwiseOperation(int operation, int Steps, int UserNum);
 
 std::vector<uint16_t> UserNumbers;
 
 int main() {
     int mode = 0;
 
-    std::cout << "Welcome to the Bit Manupalation Utillity! \nIt is an application to explore bitwise operators with the use of the command line!" << std::endl;
-    std::cout << "\n\n1. Enter/change numbers to bitwise\n2.Performe bitwise operation\n3.Read up on bitwise operators.\n4.exit" << std::endl;
+    std::cout << "Welcome to the Bit Manipulation Utillity! \nIt is an application to explore bitwise operators with the use of the command line!" << std::endl;
+    std::cout << "\n\n1. Enter/change numbers to bitwise\n2.Perform bitwise operation\n3.Read up on bitwise operators.\n4.exit" << std::endl;
     do{
         mode = InputManager();
 
         switch (mode)
         {
-        case 1:
-            mode = NumberModifactionMode();
+        case INPUT_NUMBERS:
+            mode = NumberModificationMode();
             break;
-        case 2:
+        case BITWISE_OPERATION:
             mode = BitWiseOperation();
             break;  
-        case 3:
+        case HELP:
             break;
-        case 8: // error in program
+        case EXIT:
+            break;
+        case ERROR: // error in program
             break;
         default:
+             std::cout << mode <<" is not a valid chocice!" << std::endl;
             break;
         }
         if(mode < 0)
@@ -58,14 +64,17 @@ int BitWiseOperation(){
     std::cout << "What number do you wish to modify?" << std::endl;
     int UserNum = InputManager();
     int index = GetIndex(UserNum);
+    if(index = -1)
+    {
+        return -1;
+    }
     switch (UserChoice)
     {
     case 1:        
     {
         std::cout << "what number do you want to performe the AND operator with: " << std::endl;
         int Steps = InputManager();
-        std::bitset<sizeof(uint16_t)> bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
-        UserNumbers[GetIndex(UserNum)] = UserNumbers[GetIndex(UserNum)] & Steps;
+        (void)ApplyBitwiseOperation(UserChoice,Steps,UserNum);
         break;
     }
     break;
@@ -73,8 +82,7 @@ int BitWiseOperation(){
     {
         std::cout << "What number do you want to performe the OR operator with: " << std::endl;
         int Steps = InputManager();
-        std::bitset<sizeof(uint16_t)> bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
-        UserNumbers[GetIndex(UserNum)] = UserNumbers[GetIndex(UserNum)] | Steps;
+        (void)ApplyBitwiseOperation(UserChoice,Steps,UserNum);
         break;
     }
     break;
@@ -82,37 +90,27 @@ int BitWiseOperation(){
     {
         std::cout << "What number do you want to performe the XOR operator with: " << std::endl;
         int Steps = InputManager();
-        std::bitset<sizeof(uint16_t)> bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
-        UserNumbers[GetIndex(UserNum)] = UserNumbers[GetIndex(UserNum)] ^ Steps;
+        (void)ApplyBitwiseOperation(UserChoice,Steps,UserNum);
         break;
     }
     break;
     case 4:
     {
-        UserNumbers[GetIndex(UserNum)] = ~UserNumbers[GetIndex(UserNum)];
+        (void)ApplyBitwiseOperation(UserChoice,0,UserNum);
     }    
         break;
     case 5:
     {
         std::cout << "Number of steps to the right is: " << std::endl;
         int Steps = InputManager();
-        std::bitset<sizeof(uint16_t)> bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
-        UserNumbers[GetIndex(UserNum)] = UserNumbers[GetIndex(UserNum)] >> Steps;
+        (void)ApplyBitwiseOperation(UserChoice,Steps,UserNum);
         break;
     }
     case 6:
     {
         std::cout << "Number of steps to the left is: " << std::endl;
         int Steps = InputManager();
-        std::bitset<sizeof(uint16_t)> bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
-#ifdef DEBUG
-        std::cout << "Before edit: " << bits << std::endl;
-#endif
-        UserNumbers[GetIndex(UserNum)] = UserNumbers[GetIndex(UserNum)] << Steps;
-#ifdef DEBUG
-        bits = std::bitset<sizeof(uint16_t)>(UserNumbers[index]);
-        std::cout << "After edit: " << bits << std::endl;
-#endif
+        (void)ApplyBitwiseOperation(UserChoice,Steps,UserNum);
     }
         break;
     default:
@@ -121,8 +119,20 @@ int BitWiseOperation(){
     return 1;
 }
 
+void ApplyBitwiseOperation(int operation, int Steps, int UserNum) {
+    switch (operation) {
+        case 1: UserNumbers[GetIndex(UserNum)] &= Steps; break;
+        case 2: UserNumbers[GetIndex(UserNum)] |= Steps; break;
+        case 3: UserNumbers[GetIndex(UserNum)] ^= Steps; break;
+        case 4: UserNumbers[GetIndex(UserNum)] = ~UserNumbers[GetIndex(UserNum)]; break;
+        case 5: UserNumbers[GetIndex(UserNum)] >>= Steps; break;
+        case 6: UserNumbers[GetIndex(UserNum)] <<= Steps; break;
+        default: break;
+    }
+}
 
-int NumberModifactionMode(){
+
+int NumberModificationMode(){
     int input;
     if(UserNumbers.empty())
     {
@@ -163,7 +173,7 @@ int AddNumbers(int NumberOfElements)
     }
 
     if(UserNumbers.size() == NumberOfElements){
-        std::cout << "Succesully added: " << UserNumbers.size() << std::endl;
+        std::cout << "Successfully added: " << UserNumbers.size() << std::endl;
         return 1;
     }
     else
@@ -185,7 +195,7 @@ int InputManager(){
         return std::stoi(a);
     }
 
-    return 0;
+    return -1;
 }
 
 int GetIndex(int SearchNumber){
