@@ -8,7 +8,7 @@ Requierment:
 
   - Bitwise operations to handle moves per player.
   - GUI should utilize the console imput.
-  - Use atleast one lamda
+  - Use atleast one lamda (not necessary, more to force me to learn it properly)
 
 
 Implementation plan:
