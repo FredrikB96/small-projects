@@ -4,20 +4,24 @@
 #include "..\headers\GUIConsole.h"
 #include <cstdint>
 
-void ShowMessage(std::string msg){
+void ShowMessage(std::string msg)
+{
     std::cout << msg << std::endl;
 }
 
-void DisplayBoard(uint16_t PlayerX, uint16_t PlayerY) {
-    for (int i = 0; i < 9; i++) {
+void DisplayBoard(uint16_t PlayerX, uint16_t PlayerY)
+{
+    for (int i = 0; i < 9; i++)
+    {
         if (PlayerX & (1 << i))
             std::cout << "X ";
         else if (PlayerY & (1 << i))
             std::cout << "Y ";
         else
-            std::cout << i+1 << " ";
-        
-        if ((i + 1) % 3 == 0) std::cout << std::endl;
+            std::cout << i + 1 << " ";
+
+        if ((i + 1) % 3 == 0)
+            std::cout << std::endl;
         else
             std::cout << "| ";
     }
@@ -27,7 +31,9 @@ int GetInput()
 {
     std::string input;
     std::cin >> input;
-    auto number = [&](char a) -> int{   
+
+    auto number = [&](char a) -> int
+    {   
         switch (a)
         {
         case '1': return 1; break;
@@ -40,9 +46,7 @@ int GetInput()
         case '8': return 8; break;
         case '9': return 9; break;
         default: return -1; break;
-        }};
+        } };
 
-    return number(input[0])-1;
+    return number(input[0]) - 1;
 }
-
-

@@ -5,5 +5,5 @@
 #define FULLBOARD 0b111111111
 
 int MakeMove(uint16_t &PlayerX, uint16_t &PlayerY, bool PlayerXMove,int PM);
-int CheckWinner(uint16_t &Player);
+int CheckWinner(uint16_t Player);
 int GameNeedsReset(uint16_t &PlayerX, uint16_t &PlayerY);
