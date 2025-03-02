@@ -10,6 +10,8 @@ int GameOver = 0;
 
 int main() 
 {
+    PlayerX = 0;
+    PlayerY = 0;
     while(!GameOver){
     DisplayBoard(PlayerX,PlayerY);
     if(PlayerXMove)
@@ -45,14 +47,17 @@ int main()
     if(answer == 'y' || answer == 'Y'){
         PlayerX = 0; PlayerY = 0;
     }
+    else
+        GameOver = 1;
     }
+    else if(GameNeedsReset(PlayerX,PlayerY))
+    {
+        ShowMessage("Gameboard full, resetting game now.");
+        PlayerY = 0; PlayerX = 0;
     }
+    }   
 
     char a;
     std::cin >> a;
     return 1;
 }
-
-// This file should handle all the game logic and winning conditions.
-// Might have to split up more later.
-// Maybe have one logic file?
